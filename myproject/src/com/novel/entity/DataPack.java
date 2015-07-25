@@ -12,9 +12,6 @@ import java.io.Serializable;
 public class DataPack<T> implements Serializable{
 	private T object ;// 这个范型的类型可能是User和Novel或List<Novel> 
 	private boolean success ;
-	/**
-	 * TODO : 这个名字需要改 
-	 */
 	private String resultInfo ;
 	private int commond ;
 	public DataPack() {

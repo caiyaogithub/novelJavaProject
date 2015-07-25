@@ -8,6 +8,7 @@ import java.net.Socket;
 import com.novel.constant.Constant;
 import com.novel.entity.DataPack;
 import com.novel.service.ServerService;
+import com.novel.service.ServiceFactory;
 import com.novel.service.impl.ServerServiceImpl;
 
 /**
@@ -19,9 +20,12 @@ import com.novel.service.impl.ServerServiceImpl;
  */
 public class ServerHandleClientThread extends Thread {
 	private Socket socket ;
+	private ServerService serverService ;
+	
 
-	public ServerHandleClientThread(Socket socket) {
+	public ServerHandleClientThread(Socket socket ) {
 		this.socket = socket;
+		this.serverService = ServiceFactory.createServerService() ; // 每一个线程使用一个ServerService类
 	}
 	@Override
 	public void run() {
@@ -35,47 +39,47 @@ public class ServerHandleClientThread extends Thread {
 			DataPack dataPack = (DataPack)in.readObject() ;
 			int commond = dataPack.getCommond() ;
 			switch( commond ){
-				case Constant.LOGIN_CMD :
+				case Constant.CMD_LOGIN :
 					DataPack returnLoginData = 
-					new ServerServiceImpl().login(dataPack) ;
+							serverService.login(dataPack) ;
 					sendObjectToClient(returnLoginData) ;
 					break ;
-				case Constant.REGISTER_CMD :
+				case Constant.CMD_REGISTER :
 					DataPack returnRegisterData = 
-					new ServerServiceImpl().register(dataPack) ;
+							serverService.register(dataPack) ;
 					sendObjectToClient(returnRegisterData);
 					break ;
-				case Constant.DOWNLOAD_CMD :
+				case Constant.CMD_DOWNLOAD :
 					/**
 					 * 根据小说id下载小说，小说id存放在resultInfo中
 					 */
 					DataPack returnDownloadData = 
-					new ServerServiceImpl().download(dataPack) ;
+							serverService.download(dataPack) ;
 					sendObjectToClient(returnDownloadData) ;
 					break ;
-				case Constant.UPLOAD_CMD :
+				case Constant.CMD_UPLOAD :
 					/**
 					 * 上传小说，由服务器端生成id号
 					 */
 					DataPack returnUploadData = 
-					new ServerServiceImpl().upload(dataPack) ;
+							serverService.upload(dataPack) ;
 					sendObjectToClient(returnUploadData) ;
 					break; 
-				case Constant.GET_LIST_BY_CATEGORY_CMD :
+				case Constant.CMD_GET_LIST_BY_CATEGORY :
 					/**
 					 * 获取指定小说类别下的所有小说(封装在DtaPack中的obj属性，ArrayList<Novle>())
 					 */
 					DataPack returnGetListData = 
-					new ServerServiceImpl().getListByCategory(dataPack) ;
+							serverService.getListByCategory(dataPack) ;
 					sendObjectToClient(returnGetListData) ;
 					break; 
-				case Constant.CHECK_EXIST_CMD :
+				case Constant.CMD_CHECK_EXIST :
 					/**
 					 * 检查小说是否存在 ，发送时小说id在resultInfo中
 					 * 返回是否成功 在success 字段中
 					 */
 					DataPack returnCheckExistData = 
-					new ServerServiceImpl().checkExist(dataPack) ;
+							serverService.checkExist(dataPack) ;
 					sendObjectToClient(returnCheckExistData) ;
 					break ;
 				default :

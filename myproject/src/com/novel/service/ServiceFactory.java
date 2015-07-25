@@ -1,4 +1,8 @@
 package com.novel.service;
+
+import com.novel.service.impl.ClientServiceImpl;
+import com.novel.service.impl.ServerServiceImpl;
+
 /**
  * @author cy 
  *
@@ -11,4 +15,18 @@ package com.novel.service;
  * 
  */
 public class ServiceFactory {
+	/**
+	 * 创建客户端功能类
+	 * @return 
+	 */
+	public static ClientService createClientService(){
+		return new ClientServiceImpl() ;
+	}
+	/**
+	 * 创建服务器端功能实现类 
+	 * @return
+	 */
+	public static ServerService createServerService(){
+		return new ServerServiceImpl() ;
+	}
 }

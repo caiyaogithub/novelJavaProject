@@ -126,9 +126,6 @@ public class ServerServiceImpl implements ServerService {
 			allNovels = XmlUtil.getNovelListFromXml("config/novelsInfo.xml");
 		} catch (Exception e) {
 			e.printStackTrace();
-			/**
-			 * TODO ：这个地方没有判断
-			 */
 		}
 		for(Novel novel : allNovels ){
 			if(novel.getCategory().equals(category)){

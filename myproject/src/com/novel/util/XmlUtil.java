@@ -21,6 +21,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
@@ -201,10 +202,48 @@ public class XmlUtil {
 			XmlUtil.writeNovelInfoToXml(novel) ;
 			return true ;
 		}catch(Exception e ){
+			/**
+			 * 如果写入小说到文件中出现问题，要将已经写入的信息删除
+			 * 这段代码应该很少执行到 ~~~~
+			 * 
+			 */
+			System.out.println("小说写入文件失败，正在回滚~~");
+			FileUtils.deleteFile("novel/" + novel.getName() + ".txt") ;
+			XmlUtil.deleteNovelInfoFromXml(novel) ;
 			e.printStackTrace();
 			return false ;
 		}
-		
+	}
+
+	/**
+	 * 从config/novelsInfo.xml中删除与novel对象相对应的的novel标签，根据ID号判断是否相同
+	 * 
+	 * @param novel
+	 *            小说对象
+	 */
+	public static void deleteNovelInfoFromXml(Novel novel) {
+		try {
+			Document doc = getDocumentFromXml("config/novelsInfo.xml");
+			Element novelsElement = (Element) doc
+					.getElementsByTagName("novels").item(0);
+			NodeList novelElements = novelsElement
+					.getElementsByTagName("novel");
+
+			Node deleteElement = null;
+			for (int i = 0; i < novelElements.getLength(); i++) {
+				String id = ((Element) novelElements.item(i))
+						.getElementsByTagName("id").item(0).getFirstChild()
+						.getNodeValue();
+				if (id.equals(String.valueOf(novel.getId()))) {
+					deleteElement = novelElements.item(i);
+					break;
+				}
+			}
+			novelsElement.removeChild(deleteElement);
+			writeDocumentToFile(doc, "config/novlesInfo.xml");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * 将小说信息写入到config/novelsInfo.xml文件中

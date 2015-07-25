@@ -76,4 +76,14 @@ public class FileUtils {
 		out.write(content.getBytes());
 		out.close();
 	}
+	/**
+	 * 删除指定的文件 
+	 * @param filePath文件路径 
+	 */
+	public static void deleteFile(String filePath ) {
+		File file = new File(filePath) ;
+		if(file.exists()){
+			file.delete() ;
+		}
+	}
 }

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><users>
-<user><name>a</name><pwd>a</pwd></user></users>
+<user><name>b</name><pwd>b</pwd></user><user><name>r</name><pwd>r</pwd></user></users>

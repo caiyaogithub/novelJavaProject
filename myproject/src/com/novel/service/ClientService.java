@@ -20,5 +20,5 @@ public interface ClientService {
 	 * @param requestPack 请求数据包
 	 * @return 服务器返回的数据包 
 	 */
-	public DataPack sendRequestToServer(DataPack<User> requestPack ) ;
+	public DataPack sendRequestToServer(DataPack requestPack ) ;
 }
